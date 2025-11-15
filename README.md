@@ -2,8 +2,6 @@
 
 A Retrieval-Augmented Generation (RAG) based medical question-answering system built with Flask, LangChain, Pinecone, and HuggingFace embeddings.
 
----
-
 ## Features
 
 - PDF loading using `PyPDFLoader`
@@ -14,7 +12,6 @@ A Retrieval-Augmented Generation (RAG) based medical question-answering system b
 - Chat UI built with Bootstrap + jQuery (AJAX)
 - Automatic vector index creation
 
----
 
 ## Tech Stack
 
@@ -31,7 +28,6 @@ A Retrieval-Augmented Generation (RAG) based medical question-answering system b
 **LLM**
 - Google Gemini
 
----
 .
 ├── src/
 │   ├── helper.py
@@ -47,9 +43,6 @@ A Retrieval-Augmented Generation (RAG) based medical question-answering system b
 ├── requirements.txt
 └── README.md
 
-
-
----
 
 ## Setup
 
@@ -108,13 +101,11 @@ http://127.0.0.1:5000/
 5. User query → embedded + vector search
 6. Retrieved chunks → passed to LLM for grounded response
 
----
 
 ## Contributing
 
 Pull requests are welcome.
 
----
 
 ## License
 
