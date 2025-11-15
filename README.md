@@ -2,6 +2,9 @@
 
 A Retrieval-Augmented Generation (RAG) based medical question-answering system built with Flask, LangChain, Pinecone, and HuggingFace embeddings.
 
+![Preview](./images/UI.png)
+
+
 ## Features
 
 - PDF loading using `PyPDFLoader`
@@ -28,20 +31,9 @@ A Retrieval-Augmented Generation (RAG) based medical question-answering system b
 **LLM**
 - Google Gemini
 
-.
-├── src/
-│   ├── helper.py
-│   ├── store_index.py
-│
-├── data/
-├── static/
-│   └── style.css
-├── templates/
-│   └── index.html
-│
-├── setup.py
-├── requirements.txt
-└── README.md
+## Structure
+![Preview](./images/structure.png)
+
 
 
 ## Setup
