@@ -34,14 +34,14 @@ A Retrieval-Augmented Generation (RAG) based medical question-answering system b
 ---
 .
 ├── src/
-│ ├── helper.py
-│ ├── store_index.py
+│   ├── helper.py
+│   ├── store_index.py
 │
 ├── data/
 ├── static/
-│ └── style.css
+│   └── style.css
 ├── templates/
-│ └── index.html
+│   └── index.html
 │
 ├── setup.py
 ├── requirements.txt
@@ -74,12 +74,12 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-###3. Install dependencies
+### 3. Install dependencies
 ```
 pip install -r requirements.txt
 ```
 
-###4. Create a .env file
+### 4. Create a .env file
 ```
 PINECONE_API_KEY=your_pinecone_key
 GOOGLE_API_KEY=your_gemini_key
