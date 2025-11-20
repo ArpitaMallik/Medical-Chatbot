@@ -1,19 +1,18 @@
 # Medical-Chatbot
 
-A Retrieval-Augmented Generation (RAG) based medical question-answering system built with Flask, LangChain, Pinecone, and HuggingFace embeddings.
+A Retrieval-Augmented Generation (RAG) based medical question-answering system along with memory features built with Flask, LangChain, Pinecone, and HuggingFace embeddings.
 
 ![Preview](./images/UI.png)
 
 
 ## Features
-
-- PDF loading using `PyPDFLoader`
 - Text chunking with `RecursiveCharacterTextSplitter`
 - Embeddings using `all-MiniLM-L6-v2`
 - Vector search using Pinecone Serverless
 - Flask backend with `/get` query endpoint
 - Chat UI built with Bootstrap + jQuery (AJAX)
 - Automatic vector index creation
+- Has temporary memory in chat
 
 
 ## Tech Stack
