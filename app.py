@@ -5,6 +5,9 @@ from pinecone import ServerlessSpec
 from langchain_pinecone import PineconeVectorStore
 from langchain_openai import ChatOpenAI
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_classic.memory import ConversationBufferMemory
+from langchain_core.prompts import MessagesPlaceholder
+
 from langchain_classic.chains.combine_documents.stuff import StuffDocumentsChain
 from langchain_classic.prompts import ChatPromptTemplate
 from langchain_classic.chains import LLMChain
@@ -58,20 +61,47 @@ retriever = docsearch.as_retriever(search_type="similarity", search_kwargs={"k":
 
 chatModel = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
 
-# Prompt template
-prompt = ChatPromptTemplate.from_template("{context}\n\nQ: {question}\nA:")
-# LLM chain
-llm_chain = LLMChain(prompt=prompt, llm=chatModel)
-# StuffDocumentsChain
-question_answer_chain = StuffDocumentsChain(
-    llm_chain=llm_chain,
-    document_variable_name="context" 
+# # Prompt template
+# prompt = ChatPromptTemplate.from_template("{context}\n\nQ: {question}\nA:")
+# # LLM chain
+# llm_chain = LLMChain(prompt=prompt, llm=chatModel)
+# # StuffDocumentsChain
+# question_answer_chain = StuffDocumentsChain(
+#     llm_chain=llm_chain,
+#     document_variable_name="context" 
+# )
+# # RAG chain
+# rag_chain = RetrievalQA(
+#     retriever=retriever,
+#     combine_documents_chain=question_answer_chain
+# )
+
+
+# Memory
+memory = ConversationBufferMemory(
+    memory_key="chat_history",
+    return_messages=True,
+    input_key="question"      # tells memory which field is the human input
 )
-# RAG chain
-rag_chain = RetrievalQA(
-    retriever=retriever,
-    combine_documents_chain=question_answer_chain
+
+# Conversational + RAG Prompt
+conversation_prompt = ChatPromptTemplate.from_messages(
+    [
+        ("system", "You are a helpful medical chatbot. Use both the retrieved context and the chat history."),
+        MessagesPlaceholder(variable_name="chat_history"),
+        ("system", "Relevant context:\n{context}"),
+        ("human", "{question}")
+    ]
 )
+
+# Conversation LLM Chain
+conversation_chain = LLMChain(
+    llm=chatModel,
+    prompt=conversation_prompt,
+    memory=memory,
+    verbose=True
+)
+
 
 
 
@@ -81,14 +111,35 @@ def index():
 
 
 
+# @app.route("/get", methods=["GET", "POST"])
+# def chat():
+#     msg = request.form["msg"]
+#     input = msg
+#     print(input)
+#     response = rag_chain.invoke({"query": msg})
+#     print("Response : ", response["result"])
+#     return str(response["result"])
+
+
 @app.route("/get", methods=["GET", "POST"])
 def chat():
-    msg = request.form["msg"]
-    input = msg
-    print(input)
-    response = rag_chain.invoke({"query": msg})
-    print("Response : ", response["result"])
-    return str(response["result"])
+    user_msg = request.form["msg"]
+
+    # 1. Retrieve relevant documents for RAG
+    docs = retriever.invoke(user_msg)
+    context = "\n".join([d.page_content for d in docs])
+
+    # 2. Conversational + context-aware response
+    response = conversation_chain.invoke({
+        "question": user_msg,
+        "context": context
+    })
+
+    answer = response["text"]
+    return str(answer)
+
+
+
 
 
 
